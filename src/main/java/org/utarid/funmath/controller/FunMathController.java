@@ -1,4 +1,4 @@
-package org.utarid.funmath;
+package org.utarid.funmath.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
