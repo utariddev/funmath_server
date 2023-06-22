@@ -2,6 +2,8 @@ package org.utarid.funmath.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "users")
 public class UserEntity {
@@ -15,6 +17,9 @@ public class UserEntity {
 
     @Column(nullable = false, length = 64)
     private String password;
+
+    @Column(nullable = false)
+    private LocalDateTime registerDate;
 
     public Long getId() {
         return id;
@@ -38,5 +43,13 @@ public class UserEntity {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public LocalDateTime getRegisterDate() {
+        return registerDate;
+    }
+
+    public void setRegisterDate(LocalDateTime registerDate) {
+        this.registerDate = registerDate;
     }
 }

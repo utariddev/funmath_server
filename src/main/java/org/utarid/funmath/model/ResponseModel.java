@@ -1,20 +1,20 @@
 package org.utarid.funmath.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ResponseModel {
     private String error;
-    private String status;
-    private String message;
+    private List<String> message;
 
-    public ResponseModel(String error, String status, String message) {
+    public ResponseModel(String error, List<String> message) {
         this.error = error;
-        this.status = status;
         this.message = message;
     }
 
     public ResponseModel() {
         this.error = "0";
-        this.status = "0";
-        this.message = "success";
+        this.message = new ArrayList<>(List.of("success"));
     }
 
     public String getError() {
@@ -25,19 +25,12 @@ public class ResponseModel {
         this.error = error;
     }
 
-    public String getStatus() {
-        return status;
-    }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getMessage() {
+    public List<String> getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(List<String> message) {
         this.message = message;
     }
 }
