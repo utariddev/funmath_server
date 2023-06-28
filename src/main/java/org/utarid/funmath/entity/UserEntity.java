@@ -3,6 +3,7 @@ package org.utarid.funmath.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -20,6 +21,9 @@ public class UserEntity {
 
     @Column(nullable = false)
     private LocalDateTime registerDate;
+
+    @OneToMany(mappedBy = "user")
+    private List<ResultEntity> results;
 
     public Long getId() {
         return id;
