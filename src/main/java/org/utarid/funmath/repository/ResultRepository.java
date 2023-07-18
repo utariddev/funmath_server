@@ -12,5 +12,6 @@ public interface ResultRepository extends JpaRepository<ResultEntity, Long> {
     @Query(value = "SELECT * FROM public.results WHERE DATE_PART('week', result_date) = ?1 ORDER BY result DESC", nativeQuery = true)
     List<ResultEntity> findAllByWeekOrder(int week);
 
-    Optional<ResultEntity> findByUserId(Long userId);
+    @Query(value = "SELECT * FROM public.results WHERE DATE_PART('week', result_date) = ?1 AND user_id = ?2", nativeQuery = true)
+    Optional<ResultEntity> findByUserIdAndWeekNumber(int week, Long userId);
 }

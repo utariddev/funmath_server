@@ -53,7 +53,8 @@ public class FunMathServiceImpl implements FunMathService {
         ResultEntity resultEntity = resultMapper.resultDTOToResultEntity(result);
         resultEntity.setUser(user);
 
-        Optional<ResultEntity> existingResult = resultRepository.findByUserId(result.getUserId());
+        int currentWeek = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 1;
+        Optional<ResultEntity> existingResult = resultRepository.findByUserIdAndWeekNumber(currentWeek, result.getUserId());
 
         if (existingResult.isPresent()) {
             ResultEntity currentResult = existingResult.get();
@@ -64,7 +65,7 @@ public class FunMathServiceImpl implements FunMathService {
             resultEntity = resultRepository.save(resultEntity);
         }
 
-        int weeklyPosition = getOrdinalPositionOfLastInsertedResult(resultEntity.getId());
+        int weeklyPosition = getOrdinalPositionOfLastInsertedResult(resultEntity.getId(), currentWeek);
 
         SaveResultResponseModel saveResultResponseModel = new SaveResultResponseModel();
         saveResultResponseModel.setWeeklyPosition(weeklyPosition);
@@ -75,8 +76,7 @@ public class FunMathServiceImpl implements FunMathService {
         return responseModel;
     }
 
-    public int getOrdinalPositionOfLastInsertedResult(Long lastId) {
-        int currentWeek = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 1;
+    public int getOrdinalPositionOfLastInsertedResult(Long lastId, int currentWeek) {
         List<ResultEntity> sortedResults = resultRepository.findAllByWeekOrder(currentWeek);
 
         Optional<ResultEntity> optionalResult = sortedResults.stream()
