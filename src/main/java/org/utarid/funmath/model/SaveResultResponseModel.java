@@ -1,6 +1,6 @@
 package org.utarid.funmath.model;
 
-public class SetResultResponseModel {
+public class SaveResultResponseModel {
 
     int weeklyPosition;
 

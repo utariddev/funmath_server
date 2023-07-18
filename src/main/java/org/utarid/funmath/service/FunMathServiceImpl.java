@@ -10,7 +10,7 @@ import org.utarid.funmath.mapper.ResultMapperImpl;
 import org.utarid.funmath.mapper.UserMapper;
 import org.utarid.funmath.mapper.UserMapperImpl;
 import org.utarid.funmath.model.ResponseModel;
-import org.utarid.funmath.model.SetResultResponseModel;
+import org.utarid.funmath.model.SaveResultResponseModel;
 import org.utarid.funmath.repository.ResultRepository;
 import org.utarid.funmath.repository.UserRepository;
 
@@ -44,7 +44,7 @@ public class FunMathServiceImpl implements FunMathService {
     }
 
     @Override
-    public ResponseModel<SetResultResponseModel> saveResult(ResultDTO result) {
+    public ResponseModel<SaveResultResponseModel> saveResult(ResultDTO result) {
         ResultMapper resultMapper = new ResultMapperImpl();
 
         UserEntity user = new UserEntity();
@@ -66,11 +66,11 @@ public class FunMathServiceImpl implements FunMathService {
 
         int weeklyPosition = getOrdinalPositionOfLastInsertedResult(resultEntity.getId());
 
-        SetResultResponseModel setResultResponseModel = new SetResultResponseModel();
-        setResultResponseModel.setWeeklyPosition(weeklyPosition);
+        SaveResultResponseModel saveResultResponseModel = new SaveResultResponseModel();
+        saveResultResponseModel.setWeeklyPosition(weeklyPosition);
 
-        ResponseModel<SetResultResponseModel> responseModel = new ResponseModel<>();
-        responseModel.setData(setResultResponseModel);
+        ResponseModel<SaveResultResponseModel> responseModel = new ResponseModel<>();
+        responseModel.setData(saveResultResponseModel);
 
         return responseModel;
     }

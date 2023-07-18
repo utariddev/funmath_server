@@ -1,12 +1,11 @@
 package org.utarid.funmath.controller;
 
-import jakarta.validation.constraints.Null;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.utarid.funmath.dto.ResultDTO;
 import org.utarid.funmath.dto.UserDTO;
 import org.utarid.funmath.model.ResponseModel;
-import org.utarid.funmath.model.SetResultResponseModel;
+import org.utarid.funmath.model.SaveResultResponseModel;
 import org.utarid.funmath.service.FunMathService;
 
 import java.util.List;
@@ -45,7 +44,7 @@ public class FunMathController {
     }
 
     @PostMapping(value = "/saveResult")
-    public ResponseModel<SetResultResponseModel> saveResult(@Validated @RequestBody ResultDTO result) {
+    public ResponseModel<SaveResultResponseModel> saveResult(@Validated @RequestBody ResultDTO result) {
         return funMathService.saveResult(result);
     }
 }
