@@ -9,8 +9,14 @@ import org.utarid.funmath.mapper.ResultMapper;
 import org.utarid.funmath.mapper.ResultMapperImpl;
 import org.utarid.funmath.mapper.UserMapper;
 import org.utarid.funmath.mapper.UserMapperImpl;
+import org.utarid.funmath.model.ResponseModel;
+import org.utarid.funmath.model.SetResultResponseModel;
 import org.utarid.funmath.repository.ResultRepository;
 import org.utarid.funmath.repository.UserRepository;
+
+import java.util.Calendar;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FunMathServiceImpl implements FunMathService {
@@ -38,7 +44,7 @@ public class FunMathServiceImpl implements FunMathService {
     }
 
     @Override
-    public boolean saveResult(ResultDTO result) {
+    public ResponseModel<SetResultResponseModel> saveResult(ResultDTO result) {
         ResultMapper resultMapper = new ResultMapperImpl();
 
         UserEntity user = new UserEntity();
@@ -47,7 +53,36 @@ public class FunMathServiceImpl implements FunMathService {
         ResultEntity resultEntity = resultMapper.resultDTOToResultEntity(result);
         resultEntity.setUser(user);
 
-        resultRepository.save(resultEntity);
-        return true;
+        Optional<ResultEntity> existingResult = resultRepository.findByUserId(result.getUserId());
+
+        if (existingResult.isPresent()) {
+            ResultEntity currentResult = existingResult.get();
+            Long newResultValue = currentResult.getResult() + result.getResult();
+            currentResult.setResult(newResultValue);
+            resultEntity = resultRepository.save(currentResult);
+        } else {
+            resultEntity = resultRepository.save(resultEntity);
+        }
+
+        int weeklyPosition = getOrdinalPositionOfLastInsertedResult(resultEntity.getId());
+
+        SetResultResponseModel setResultResponseModel = new SetResultResponseModel();
+        setResultResponseModel.setWeeklyPosition(weeklyPosition);
+
+        ResponseModel<SetResultResponseModel> responseModel = new ResponseModel<>();
+        responseModel.setData(setResultResponseModel);
+
+        return responseModel;
+    }
+
+    public int getOrdinalPositionOfLastInsertedResult(Long lastId) {
+        int currentWeek = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - 1;
+        List<ResultEntity> sortedResults = resultRepository.findAllByWeekOrder(currentWeek);
+
+        Optional<ResultEntity> optionalResult = sortedResults.stream()
+                .filter(result -> result.getId().equals(lastId))
+                .findFirst();
+
+        return optionalResult.map(result -> sortedResults.indexOf(result) + 1).orElse(-1);
     }
 }
